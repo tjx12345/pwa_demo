@@ -1,8 +1,6 @@
 const fs = require('fs');
 const https = require('https');
 
-
-
     const Koa = require('koa');
     let app = new Koa();
     // 向推送服务,发送消息
@@ -30,8 +28,12 @@ const https = require('https');
             // 保存客户端点标识
             endPoints.push(ctx.request.body);
             ctx.status = 200;
+            
             endPoints.forEach(pushSubscription => {
-                setInterval(function() {
+                let i = 1;
+                let timer = setInterval(function() {
+                    i++;
+                    if(i=== 5) clearInterval(timer);
                     console.log(pushSubscription)
                     // 发送消息
                     webpush.sendNotification(pushSubscription, '服务器的消息来啦!')
@@ -70,7 +72,7 @@ const https = require('https');
         }
 
     })
-    app.use(require('koa-static')('../tjx12345.github.io'));
+    app.use(require('koa-static')('./'));
     app.use(bodyParser());
     app.use(router.routes());
 
